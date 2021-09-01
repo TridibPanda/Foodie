@@ -4,11 +4,9 @@ import {
   TextInput,
   StyleSheet,
   Dimensions,
-  KeyboardType,
 } from "react-native";
 
 const isHeight = Dimensions.get("window").height > 660;
-const Width = Dimensions.get("window").width > 360;
 
 const Input = (props:any) => {
   return (
