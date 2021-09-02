@@ -55,7 +55,7 @@ export const login = (email : string, password: string) => {
 };
 
 //logout
-export const logout = (navigation:any) => {
+export const logout = () => {
     return (dispatch: Object | any) => {
         Firebase.auth()
             .signOut()
@@ -63,7 +63,6 @@ export const logout = (navigation:any) => {
 
                 await AsyncStorage.removeItem('uid');
                 dispatch({ type: LOGOUT, uid: '' })
-                navigation.navigate('LoginScreen')
             })
             .catch((error) => {
                 console.log(error);
@@ -127,4 +126,5 @@ export const forget = (email : string) => {
             // An error happened.
             alert(error);
         });
-}
+};
+
