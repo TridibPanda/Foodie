@@ -1,10 +1,10 @@
 export type Recipes = {
-    recipeId: String,
-    image: String,
-    recipeName: String,
-    description: String,
-    type: String,
-    typeColor: String,
-    timeStamp: String,
-    uid: String
+    recipeId: string,
+    image: string,
+    recipeName: string,
+    description: string,
+    type: string,
+    typeColor: string,
+    timeStamp: string,
+    uid: string
 }

@@ -1,7 +1,8 @@
-import { LOCAL, SIGNUP, LOGIN, LOGOUT, UPDATE, GET } from '../actions/Auth';
+import { LOCAL, SIGNUP, LOGIN, LOGOUT, GET, VIEW } from '../actions/Auth';
 const initialState = {
     uid: '',
     data: {},
+    userProfile: {},
     isloggedIn: false,
     isloggedout: false,
 };
@@ -15,11 +16,11 @@ const AuthReducer = (state = initialState, action: Object | any) => {
         case LOGIN:
             return { ...state, uid: action.uid };
         case LOGOUT:
-            return { ...state, uid: action.uid,isloggedout: true };
-        case UPDATE:
-            return { ...state, data: action.details };
+            return { ...state, uid: action.uid, isloggedout: true };
         case GET:
             return { ...state, data: action.details };
+        case VIEW:
+            return { ...state, userProfile: action.details };
         default:
             return state;
     }

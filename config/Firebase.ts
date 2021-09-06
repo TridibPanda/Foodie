@@ -2,7 +2,7 @@ import firebase from 'firebase';
 import 'firebase/firestore';
 
 var firebaseConfig = {
-  
+
 };
 
 // Initialize Firebase

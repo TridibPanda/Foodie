@@ -3,19 +3,8 @@ import { useWindowDimensions } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { useDispatch,useSelector } from 'react-redux';
 import ListItem from '../components/ListItem';
-import { recipes, latestRecipes} from '../store/actions/Recipes';
-
-
-const bookmarksArray = [
-  {
-    foodieId: 1,
-    image: 'https://media.istockphoto.com/photos/chicken-fried-rice-picture-id945606006',
-    title: "Perfect Combation: Cakes & coffees for breakfast",
-    type: 'ASIAN FOOD',
-    typeColor: '#005',
-    date: '10/07/2021'
-  },
-]
+import { recipes, latestRecipes, bookmarks} from '../store/actions/Recipes';
+import { get } from '../store/actions/Auth';
 
 
 const HomeScreen = () => {
@@ -29,14 +18,19 @@ const HomeScreen = () => {
   ]);
 
   const latestArray = useSelector((state: any) => state.recipes.latestRecipes);
+
   const LatestScreen = () => (
     <ListItem data={latestArray} />
   );
+
   const foodiesArray = useSelector((state: any) => state.recipes.recipes);
+
   const Foodies = () => (
     <ListItem data={foodiesArray} />
   );
   
+  const bookmarksArray = useSelector((state: any) => state.recipes.bookmarks);
+
   const Bookmarks = () => (
     <ListItem data={bookmarksArray} />
   );
@@ -48,8 +42,10 @@ const HomeScreen = () => {
   });
   
   useEffect(()=>{
+    dispatch(get());
     dispatch(latestRecipes());
     dispatch(recipes());
+    dispatch(bookmarks());
   },[])
 
   return (

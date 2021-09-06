@@ -11,18 +11,22 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
+import {Recipes} from '../models/Recipes'
 import { recipeDetails} from '../store/actions/Recipes';
+import { view } from '../store/actions/Auth';
 
 const ListItem = (props: any) => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
-    const details = (item:any)=>{
+    const details = (item:Recipes)=>{
         dispatch(recipeDetails(item.recipeId));
+        dispatch(view(item.uid))
         navigation.navigate('RecipeDetailsScreen')
     }
 
     const renderItem = (itemData: any) => {
+        let date = new Date(itemData.item.timeStamp.seconds * 1000 + itemData.item.timeStamp.nanoseconds / 1000000)
         return (
             itemData.index === 0 ?
                 <TouchableOpacity onPress={()=> details(itemData.item) }>
@@ -34,7 +38,7 @@ const ListItem = (props: any) => {
                             <View style={{ ...styles.menuView, backgroundColor: itemData.item.typeColor ? itemData.item.typeColor : 'green' }}>
                                 <Text style={styles.menuTitle}>{itemData.item.type}</Text>
                             </View>
-                            <Text style={styles.menuDate}>{new Date(itemData.item.timeStamp).getDate()}</Text>
+                            <Text style={styles.menuDate}>{`${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`}</Text>
                         </View>
                     </ImageBackground>
                 </TouchableOpacity> :
@@ -47,7 +51,7 @@ const ListItem = (props: any) => {
                                 <View style={{ ...styles.menuView, backgroundColor: itemData.item.typeColor ? itemData.item.typeColor : 'green' }}>
                                     <Text style={styles.menuTitle}>{itemData.item.type}</Text>
                                 </View>
-                                <Text style={styles.itemDate}>{new Date(itemData.item.timeStamp).getDate()}</Text>
+                                <Text style={styles.itemDate}>{`${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`}</Text>
                             </View>
                         </View>
                     </View>

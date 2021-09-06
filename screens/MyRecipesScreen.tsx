@@ -8,8 +8,10 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch,useSelector } from 'react-redux';
-import { myRecipes, recipeDetails} from '../store/actions/Recipes';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch, useSelector } from 'react-redux';
+import { myRecipes, recipeDetails } from '../store/actions/Recipes';
+import { view } from '../store/actions/Auth';
 
 
 const MyRecipesScreen = () => {
@@ -17,12 +19,13 @@ const MyRecipesScreen = () => {
     const navigation = useNavigation();
     const listData = useSelector((state: any) => state.recipes.myRecipes);
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(myRecipes());
-      },[])
+    }, [])
 
-      const details = (item:any)=>{
+    const details = (item: any) => {
         dispatch(recipeDetails(item.recipeId));
+        dispatch(view(item.uid));
         navigation.navigate('RecipeDetailsScreen')
     }
 
@@ -32,7 +35,7 @@ const MyRecipesScreen = () => {
 
                 {listData.map((item: any, index: any) => {
                     return (
-                        <TouchableOpacity key={index} onPress={()=> details(item) }>
+                        <TouchableOpacity key={index} onPress={() => details(item)}>
                             <ImageBackground source={{ uri: item.image }}
                                 style={styles.bgImage}>
                                 <Text style={styles.title} numberOfLines={1}>{item.recipeName}</Text>

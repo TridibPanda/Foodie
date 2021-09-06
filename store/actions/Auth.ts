@@ -4,8 +4,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const SIGNUP = 'SIGNUP';
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
-export const UPDATE = 'UPDATE';
 export const GET = 'GET';
+export const VIEW = 'VIEW';
 export const LOCAL  = 'LOCAL';
 
 //signup
@@ -78,37 +78,27 @@ export const local = () => {
     }
 };
 
-export const update = (name: string,email: string,phone: string | any,location:string,navigation:any) => {
+// get your profile
+export const get = () => {
     return async (dispatch: Object | any) => {
         const userId = await AsyncStorage.getItem('uid');
-		 db.collection("Users")
+			db.collection('Users')
 			.doc(`${userId}`)
-			.update({
-				name: name,
-				email: email,
-				phone: phone,
-				location: location,
+			.get().then((doc)=> {
+                dispatch({type: GET, details: doc.data() })
+			}).catch((error) => {
+				console.log(error);
 			})
-			.then(() =>{
-                navigation.goBack();
-                dispatch({type: UPDATE, details:{
-                    name: name,
-                    email: email,
-                    phone: phone,
-                    location: location,
-                } })
-            } )
-			.catch((error) => console.log(error));
     }
 };
 
-export const get = () => {
+// view other profile
+export const view = (userId:string) => {
     return async (dispatch: Object | any) => {
-        const userId:string | any = await AsyncStorage.getItem('uid');
 			db.collection('Users')
-			.doc(userId)
+			.doc(`${userId}`)
 			.get().then((doc)=> {
-                dispatch({type: GET, details: doc.data() })
+                dispatch({type: VIEW, details: doc.data() })
 			}).catch((error) => {
 				console.log(error);
 			})

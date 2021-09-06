@@ -2,7 +2,8 @@ import React from 'react';
 import {
   Image,
   TouchableOpacity,
-  Text
+  Text,
+  View
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer, DrawerActions } from '@react-navigation/native';
@@ -127,13 +128,14 @@ const ProfileStack = () => {
 // Drawer
 const DrawerNav = () => {
   const dispatch = useDispatch();
+  const userData = useSelector((state: any) => state.auth.data);
 
   return (
     <Drawer.Navigator initialRouteName="HomeStack" drawerContent={props => {
       return (
         <DrawerContentScrollView {...props} >
           <Image source={{ uri: 'https://media.istockphoto.com/photos/chicken-fried-rice-picture-id945606006' }} style={{ height: 150 }} />
-          <TouchableOpacity style={{alignItems:'center',margin:10}}>
+          <View style={{alignItems:'center',margin:10}}>
                 <Image style={{
                   height: 100,
                   width: 100,
@@ -141,9 +143,9 @@ const DrawerNav = () => {
                   borderWidth:2,
                   overflow:'hidden',
                   borderColor:'#ccc',
-                }} source={{ uri: 'https://avatars.githubusercontent.com/u/52310053?s=400&u=44545b8cff208f6e9a2fcf145827d4cc9d7ffb1f&v=4' }} />
-                <Text style={{fontSize:20,color:'#000',textAlign:'center'}}>Tridib Panda</Text>
-              </TouchableOpacity>
+                }} source={{ uri: userData.image ? userData.image : 'https://icon-library.com/images/default-user-icon/default-user-icon-20.jpg' }} />
+                <Text style={{fontSize:20,color:'#000',textAlign:'center'}}>{userData.name}</Text>
+              </View>
           <DrawerItemList {...props}/>
           <TouchableOpacity style={{ flexDirection: 'row', margin: 15 }} onPress={() => dispatch(logout())}>
             <Text style={{ color: '#ccc', fontSize: 15 }}>Log-out</Text>
@@ -206,6 +208,7 @@ const AppNavigator = () => {
   const userId = useSelector((state: any) => state.auth.uid);
   const isloggedIn = useSelector((state: any) => state.auth.isloggedIn);
   const recipe = useSelector((state: any) => state.recipes.recipe);
+  const userProfile = useSelector((state: any) => state.auth.userProfile);
 
   return (
     <NavigationContainer>
@@ -248,7 +251,7 @@ const AppNavigator = () => {
                 name="ProfileScreen"
                 component={ProfileScreen}
                 options={({ route }) => ({
-                  title: route.params as any,
+                  title: userProfile.name,
                 })}
               />
               <Stack.Screen
@@ -258,7 +261,7 @@ const AppNavigator = () => {
             title: recipe.type,
             
             headerRight: () => (
-              <TouchableOpacity onPress={()=> navigation.navigate('ProfileScreen','Tridib Panda') }>
+              <TouchableOpacity onPress={()=> navigation.navigate('ProfileScreen') }>
                 <Image style={{
                   height: 40,
                   width: 40,
@@ -267,7 +270,7 @@ const AppNavigator = () => {
                   borderRadius: 10,
                   borderWidth:2,
                   borderColor:'#ccc',
-                }} source={{ uri: 'https://avatars.githubusercontent.com/u/52310053?s=400&u=44545b8cff208f6e9a2fcf145827d4cc9d7ffb1f&v=4' }} />
+                }} source={{ uri: userProfile.image ? userProfile.image : 'https://icon-library.com/images/default-user-icon/default-user-icon-20.jpg' }} />
               </TouchableOpacity>
             ),
           })}

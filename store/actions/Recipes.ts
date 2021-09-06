@@ -6,6 +6,8 @@ export const RECIPES = 'RECIPES';
 export const LATEST_RECIPES = 'LATEST_RECIPES';
 export const POST_RECIPE = 'POST_RECIPE';
 export const MY_RECIPES = 'MY_RECIPES';
+export const USER_RECIPES = 'USER_RECIPES';
+export const BOOKMARKS = 'BOOKMARKS';
 
 //recipes
 export const recipes = () => {
@@ -129,7 +131,38 @@ export const myRecipes = () => {
     }
 };
 
+//user recipes 
+export const userRecipes = (uid:string | null) => {
+    return async (dispatch: Object | any) => {
+        var data = new Array;
+        db.collection('RecipeList').where('uid','==',uid)
+            .get().then((querySnapshot) => {
+                if (!querySnapshot.empty) {
+                    querySnapshot.forEach((doc) => {
+                        data.push(doc.data());
+                    });
+                    dispatch({ type: USER_RECIPES, userRecipes: data });
+                }
+            }).catch((error) => {
+                console.error('Error adding document: ', error);
+            })
+    }
+};
+
 // recipe details
 export const recipeDetails = (id: string) => {
     return { type: RECIPE_DETAILS, recipeId: id };
+};
+
+//bookmarks recipe
+export const bookmarks = () => {
+    return async (dispatch: Object | any) => {
+    await AsyncStorage.getItem('Bookmarks').then((req:any) => {
+        const getItem = JSON.parse(req);
+        console.log(getItem, 'hi GET ITEM HERE');
+        if (getItem !== null) {
+            dispatch({ type: BOOKMARKS, bookmarks: getItem });
+        }
+    });
+};
 };
