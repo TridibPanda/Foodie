@@ -34,7 +34,7 @@ const ForgotPasswordScreen = () => {
                 <Ionicons
                     name={Platform.OS === 'android' ? 'md-close' : 'ios-close'}
                     size={Platform.OS === 'android' ? 30 : 40}
-                    color="white"
+                    color="#000"
                     onPress={() => navigation.goBack()}
                     style={{
                         marginTop: 10,
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#000'
+        backgroundColor: '#fff'
     },
     headerTitle: {
         marginTop: 30,
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         margin: 20,
         fontSize: 17,
-        color: '#fff',
+        color: '#7E8084',
     },
     inputContainer: {
         width: '90%',

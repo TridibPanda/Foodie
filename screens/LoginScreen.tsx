@@ -42,7 +42,7 @@ const LoginScreen = () => {
 
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} style={{ flex: 1 }}>
-            <ScrollView style={{ backgroundColor: "#000" }}>
+            <ScrollView style={{ backgroundColor: "#fff" }}>
                 <Loading visible={visible} />
                 <View style={styles.container}>
                     <View style={styles.headerMargin}>
@@ -64,7 +64,7 @@ const LoginScreen = () => {
                             keyboardType="default"
                             secureTextEntry={secure}
                             autoCapitalize="none"
-                            placeholderTextColor="white"
+                            placeholderTextColor="#000"
                             onChangeText={(password) => {
                                 setPassword(password);
                             }}
@@ -74,7 +74,7 @@ const LoginScreen = () => {
                             size={23}
                             name={secure ? 'ios-eye-off' : 'ios-eye'}
                             onPress={changeEntry}
-                            color="#fff"
+                            color="#000"
                         />
                     </View>
                     <TouchableOpacity
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: "#000"
+        backgroundColor: "#fff"
     },
     headerMargin: {
         marginVertical: 100,
@@ -135,13 +135,13 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         borderWidth: 1,
         borderRadius: 35,
-        borderColor: '#fff',
+        borderColor: '#000',
         height: 42,
         marginBottom: 5,
     },
     passwordText: {
         flex: 1,
-        color: '#fff',
+        color: '#000',
         padding: 10,
         fontSize: 17,
     },
@@ -159,18 +159,18 @@ const styles = StyleSheet.create({
     },
     forgotText: {
         textAlign: 'center',
-        color: '#fff',
+        color: '#000',
         padding: 15,
         fontSize: 15,
     },
     signupView: {
         flexDirection: 'row',
-        marginTop: 200,
+        marginTop: 20,
     },
     bottomText: {
         paddingRight: 5,
         textAlign: 'center',
-        color: '#fff',
+        color: '#000',
         fontSize: 15
     },
     signupText: {

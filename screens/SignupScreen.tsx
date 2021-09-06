@@ -57,7 +57,7 @@ const SignupScreen = () => {
 
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} style={{ flex: 1 }}>
-            <ScrollView style={{ backgroundColor: "#000" }}>
+            <ScrollView style={{ backgroundColor: "#fff" }}>
                 <Loading visible={visible} />
                 <View style={styles.container}>
                     <View style={styles.headerMargin}>
@@ -101,7 +101,7 @@ const SignupScreen = () => {
                             keyboardType="default"
                             secureTextEntry={secure}
                             autoCapitalize="none"
-                            placeholderTextColor="white"
+                            placeholderTextColor="#000"
                             onChangeText={(password) => (password.length > 7 ? setPassword({ field: password, check: false }) : setPassword({ field: '', check: true }))}
                         />
                         <Ionicons
@@ -109,7 +109,7 @@ const SignupScreen = () => {
                             size={23}
                             name={secure ? 'ios-eye-off' : 'ios-eye'}
                             onPress={changeEntry}
-                            color="#fff"
+                            color="#000"
                         />
                     </View>
                     {password.check ? <Text style={{ ...styles.errortext, padding: 5 }}>Password should be atleast 8 character </Text> : null}
@@ -176,13 +176,13 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         borderWidth: 1,
         borderRadius: 35,
-        borderColor: '#fff',
+        borderColor: '#000',
         height: 42,
         marginTop: 5,
     },
     passwordText: {
         flex: 1,
-        color: '#fff',
+        color: '#000',
         padding: 10,
         fontSize: 17,
     },
@@ -206,12 +206,13 @@ const styles = StyleSheet.create({
     },
     loginView: {
         flexDirection: 'row',
-        marginTop: 150,
+        marginTop: 20,
+        marginBottom:10
     },
     bottomLoginText: {
         paddingRight: 5,
         textAlign: 'center',
-        color: '#fff',
+        color: '#000',
         fontSize: 15
     },
     loginText: {

@@ -13,7 +13,7 @@ const Input = (props:any) => {
     <View style={styles.input}>
       <TextInput
         {...props}
-        placeholderTextColor="white"
+        placeholderTextColor="#000"
         keyboardType={props.keyboardType}
         autoCapitalize={props.autoCapitalize}
         secureTextEntry={props.secureTextEntry}
@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
   },
   inputText: {
     padding: isHeight ? 10 : 5,
-    borderColor: "white",
-    color: "white",
+    borderColor: "#000",
+    color: "#000",
     borderWidth: 1,
     borderRadius: 35,
     backgroundColor: "transparent",

@@ -9,7 +9,6 @@ import { NavigationContainer, DrawerActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { useSelector, useDispatch } from 'react-redux';
-
 import { logout } from '../store/actions/Auth';
 
 import DefaultScreen from '../screens/DefaultScreen';
@@ -19,6 +18,10 @@ import LoginScreen from '../screens/LoginScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import HomeScreen from '../screens/HomeScreen';
 import MyRecipesScreen from '../screens/MyRecipesScreen';
+import PostRecipeScreen from '../screens/PostRecipeScreen';
+import RecipeDetailsScreen from '../screens/RecipeDetailsScreen';
+import MyProfileScreen from '../screens/MyProfileScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -88,6 +91,38 @@ const MyrecipesStack = () => {
     </Stack.Navigator>
   )
 }
+// Profile stack
+const ProfileStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name='MyProfileScreen'
+        component={MyProfileScreen}
+        options={({ navigation }) => ({
+          title: 'Profile',
+          headerLeft: () => (
+            <Ionicons
+              style={{ padding: 15 }}
+              name="ios-list"
+              size={30}
+              color="#000"
+              onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+            />
+          ),
+          headerRight: () => (
+            <Ionicons
+              style={{ padding: 15 }}
+              name="search"
+              size={25}
+              color="#000"
+              onPress={() => alert("Hi")}
+            />
+          ),
+        })}
+      />
+    </Stack.Navigator>
+  )
+};
 
 // Drawer
 const DrawerNav = () => {
@@ -96,9 +131,20 @@ const DrawerNav = () => {
   return (
     <Drawer.Navigator initialRouteName="HomeStack" drawerContent={props => {
       return (
-        <DrawerContentScrollView {...props} style={{ }}>
-          <Image source={{ uri: 'https://media.istockphoto.com/photos/chicken-fried-rice-picture-id945606006' }} style={{ height: 200 }} />
-          <DrawerItemList {...props} />
+        <DrawerContentScrollView {...props} >
+          <Image source={{ uri: 'https://media.istockphoto.com/photos/chicken-fried-rice-picture-id945606006' }} style={{ height: 150 }} />
+          <TouchableOpacity style={{alignItems:'center',margin:10}}>
+                <Image style={{
+                  height: 100,
+                  width: 100,
+                  borderRadius: 10,
+                  borderWidth:2,
+                  overflow:'hidden',
+                  borderColor:'#ccc',
+                }} source={{ uri: 'https://avatars.githubusercontent.com/u/52310053?s=400&u=44545b8cff208f6e9a2fcf145827d4cc9d7ffb1f&v=4' }} />
+                <Text style={{fontSize:20,color:'#000',textAlign:'center'}}>Tridib Panda</Text>
+              </TouchableOpacity>
+          <DrawerItemList {...props}/>
           <TouchableOpacity style={{ flexDirection: 'row', margin: 15 }} onPress={() => dispatch(logout())}>
             <Text style={{ color: '#ccc', fontSize: 15 }}>Log-out</Text>
             <Ionicons
@@ -131,17 +177,17 @@ const DrawerNav = () => {
           />
         ),
       }} />
-      <Drawer.Screen name="Add Recipe" component={MyrecipesStack} options={{
-        title: 'Add Recipe',
+      <Drawer.Screen name="PostRecipeScreen" component={PostRecipeScreen} options={{
+        title: 'Post Recipe',
         drawerIcon: ({ focused, size }) => (
           <Ionicons
-            name="add"
+            name="add-circle"
             size={size}
             color={focused ? '#2759d9' : '#ccc'}
           />
         ),
       }} />
-      <Drawer.Screen name="Profile" component={MyrecipesStack} options={{
+      <Drawer.Screen name="Profile" component={ProfileStack} options={{
         title: 'Profile',
         drawerIcon: ({ focused, size }) => (
           <Ionicons
@@ -159,6 +205,7 @@ const AppNavigator = () => {
 
   const userId = useSelector((state: any) => state.auth.uid);
   const isloggedIn = useSelector((state: any) => state.auth.isloggedIn);
+  const recipe = useSelector((state: any) => state.recipes.recipe);
 
   return (
     <NavigationContainer>
@@ -197,6 +244,34 @@ const AppNavigator = () => {
               />
             </>
         }
+        <Stack.Screen
+                name="ProfileScreen"
+                component={ProfileScreen}
+                options={({ route }) => ({
+                  title: route.params as any,
+                })}
+              />
+              <Stack.Screen
+          name="RecipeDetailsScreen"
+          component={RecipeDetailsScreen}
+          options={({ route,navigation }) => ({
+            title: recipe.type,
+            
+            headerRight: () => (
+              <TouchableOpacity onPress={()=> navigation.navigate('ProfileScreen','Tridib Panda') }>
+                <Image style={{
+                  height: 40,
+                  width: 40,
+                  padding: 15,
+                  marginRight: 20,
+                  borderRadius: 10,
+                  borderWidth:2,
+                  borderColor:'#ccc',
+                }} source={{ uri: 'https://avatars.githubusercontent.com/u/52310053?s=400&u=44545b8cff208f6e9a2fcf145827d4cc9d7ffb1f&v=4' }} />
+              </TouchableOpacity>
+            ),
+          })}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

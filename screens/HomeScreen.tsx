@@ -1,93 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useWindowDimensions } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import { useDispatch,useSelector } from 'react-redux';
 import ListItem from '../components/ListItem';
+import { recipes, latestRecipes} from '../store/actions/Recipes';
 
-const latestArray = [
-  {
-    foodieId: 1,
-    image: 'https://media.istockphoto.com/photos/chicken-fried-rice-picture-id945606006',
-    title: "Perfect Combation: Cakes & coffees for breakfast",
-    type: 'ASIAN FOOD',
-    typeColor: '#005',
-    date: '10/07/2021'
-  },
-  {
-    foodieId: 2,
-    image: 'https://media.istockphoto.com/photos/delicious-homemade-hamburger-and-french-fries-picture-id1254672762?s=612x612',
-    title: 'Best Ramen in town! for foodie lover',
-    type: 'ASIAN FOOD',
-    typeColor: 'red',
-    date: '1/07/2021'
-  },
-  {
-    foodieId: 3,
-    image: 'https://media.istockphoto.com/photos/juicy-hamburger-on-white-background-picture-id1206323282',
-    title: 'Best Ramen in town! for foodie lover',
-    type: 'ASIAN FOOD',
-    typeColor: 'blue',
-    date: '20/07/2021'
-  },
-  {
-    foodieId: 4,
-    image: 'https://media.istockphoto.com/photos/chicken-fried-rice-picture-id945606006',
-    title: 'Best Ramen in town! for foodie lover',
-    type: 'ASIAN FOOD',
-    typeColor: '#444',
-    date: '10/12/2021'
-  },
-  {
-    foodieId: 5,
-    image: 'https://media.istockphoto.com/photos/delicious-homemade-hamburger-and-french-fries-picture-id1254672762?s=612x612',
-    title: 'Best Ramen in town! for foodie lover',
-    type: 'ASIAN FOOD',
-    typeColor: '#444',
-    date: '10/12/2021'
-  }
-];
-const foodiesArray = [
-  {
-    foodieId: 1,
-    image: 'https://media.istockphoto.com/photos/delicious-homemade-hamburger-and-french-fries-picture-id1254672762?s=612x612',
-    title: "Perfect Combation: Cakes & coffees for breakfast",
-    type: 'ASIAN FOOD',
-    typeColor: '#005',
-    date: '10/07/2021'
-  },
-  {
-    foodieId: 2,
-    image: 'https://media.istockphoto.com/photos/delicious-homemade-hamburger-and-french-fries-picture-id1254672762?s=612x612',
-    title: 'Best Ramen in town! for foodie lover',
-    type: 'ASIAN FOOD',
-    typeColor: 'red',
-    date: '1/07/2021'
-  },
 
-  {
-    foodieId: 3,
-    image: 'https://media.istockphoto.com/photos/chicken-fried-rice-picture-id945606006',
-    title: 'Best Ramen in town! for foodie lover',
-    type: 'ASIAN FOOD',
-    typeColor: '#444',
-    date: '10/12/2021'
-  },
-  {
-    foodieId: 4,
-    image: 'https://media.istockphoto.com/photos/delicious-homemade-hamburger-and-french-fries-picture-id1254672762?s=612x612',
-    title: 'Best Ramen in town! for foodie lover',
-    type: 'ASIAN FOOD',
-    typeColor: '#444',
-    date: '10/12/2021'
-  },
-  {
-    foodieId: 5,
-    image: 'https://media.istockphoto.com/photos/juicy-hamburger-on-white-background-picture-id1206323282',
-    title: 'Best Ramen in town! for foodie lover',
-    type: 'ASIAN FOOD',
-    typeColor: 'blue',
-    date: '20/07/2021'
-  },
-];
 const bookmarksArray = [
   {
     foodieId: 1,
@@ -97,43 +15,11 @@ const bookmarksArray = [
     typeColor: '#005',
     date: '10/07/2021'
   },
-  {
-    foodieId: 2,
-    image: 'https://media.istockphoto.com/photos/delicious-homemade-hamburger-and-french-fries-picture-id1254672762?s=612x612',
-    title: 'Best Ramen in town! for foodie lover',
-    type: 'ASIAN FOOD',
-    typeColor: 'red',
-    date: '1/07/2021'
-  },
-  {
-    foodieId: 3,
-    image: 'https://media.istockphoto.com/photos/juicy-hamburger-on-white-background-picture-id1206323282',
-    title: 'Best Ramen in town! for foodie lover',
-    type: 'ASIAN FOOD',
-    typeColor: 'blue',
-    date: '20/07/2021'
-  },
 ]
 
-const LatestScreen = () => (
-  <ListItem data={latestArray} />
-);
-
-const Foodies = () => (
-  <ListItem data={foodiesArray} />
-);
-
-const Bookmarks = () => (
-  <ListItem data={bookmarksArray} />
-);
-
-const renderScene = SceneMap({
-  latest: LatestScreen,
-  foodies: Foodies,
-  bookmarks: Bookmarks
-});
 
 const HomeScreen = () => {
+  const dispatch = useDispatch();
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
   const [routes] = useState([
@@ -141,6 +27,30 @@ const HomeScreen = () => {
     { key: 'foodies', title: 'Foodies' },
     { key: 'bookmarks', title: 'Bookmarks' }
   ]);
+
+  const latestArray = useSelector((state: any) => state.recipes.latestRecipes);
+  const LatestScreen = () => (
+    <ListItem data={latestArray} />
+  );
+  const foodiesArray = useSelector((state: any) => state.recipes.recipes);
+  const Foodies = () => (
+    <ListItem data={foodiesArray} />
+  );
+  
+  const Bookmarks = () => (
+    <ListItem data={bookmarksArray} />
+  );
+  
+  const renderScene = SceneMap({
+    latest: LatestScreen,
+    foodies: Foodies,
+    bookmarks: Bookmarks
+  });
+  
+  useEffect(()=>{
+    dispatch(latestRecipes());
+    dispatch(recipes());
+  },[])
 
   return (
 

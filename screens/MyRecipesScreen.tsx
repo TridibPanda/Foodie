@@ -8,62 +8,23 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch,useSelector } from 'react-redux';
+import { myRecipes, recipeDetails} from '../store/actions/Recipes';
 
-const listData = [
-    {
-        foodieId: 1,
-        image: 'https://media.istockphoto.com/photos/delicious-homemade-hamburger-and-french-fries-picture-id1254672762?s=612x612',
-        title: "Main Entree",
-        type: 'ASIAN FOOD',
-        typeColor: '#005',
-        date: '10/07/2021'
-    },
-    {
-        foodieId: 2,
-        image: 'https://media.istockphoto.com/photos/delicious-homemade-hamburger-and-french-fries-picture-id1254672762?s=612x612',
-        title: 'Best Ramen in town! for foodie lover',
-        type: 'ASIAN FOOD',
-        typeColor: 'red',
-        date: '1/07/2021'
-    },
-
-    {
-        foodieId: 3,
-        image: 'https://media.istockphoto.com/photos/chicken-fried-rice-picture-id945606006',
-        title: 'Best Ramen in town! for foodie lover',
-        type: 'ASIAN FOOD',
-        typeColor: '#444',
-        date: '10/12/2021'
-    },
-    {
-        foodieId: 4,
-        image: 'https://media.istockphoto.com/photos/delicious-homemade-hamburger-and-french-fries-picture-id1254672762?s=612x612',
-        title: 'Best Ramen in town! for foodie lover',
-        type: 'ASIAN FOOD',
-        typeColor: '#444',
-        date: '10/12/2021'
-    },
-    {
-        foodieId: 5,
-        image: 'https://media.istockphoto.com/photos/juicy-hamburger-on-white-background-picture-id1206323282',
-        title: 'Best Ramen in town! for foodie lover',
-        type: 'ASIAN FOOD',
-        typeColor: 'blue',
-        date: '20/07/2021'
-    },
-    {
-        foodieId: 6,
-        image: 'https://media.istockphoto.com/photos/chicken-fried-rice-picture-id945606006',
-        title: 'Best Ramen in town! for foodie lover',
-        type: 'ASIAN FOOD',
-        typeColor: '#444',
-        date: '10/12/2021'
-    },
-];
 
 const MyRecipesScreen = () => {
-
+    const dispatch = useDispatch();
     const navigation = useNavigation();
+    const listData = useSelector((state: any) => state.recipes.myRecipes);
+
+    useEffect(()=>{
+        dispatch(myRecipes());
+      },[])
+
+      const details = (item:any)=>{
+        dispatch(recipeDetails(item.recipeId));
+        navigation.navigate('RecipeDetailsScreen')
+    }
 
     return (
         <ScrollView style={styles.screen} showsVerticalScrollIndicator={false}>
@@ -71,10 +32,10 @@ const MyRecipesScreen = () => {
 
                 {listData.map((item: any, index: any) => {
                     return (
-                        <TouchableOpacity key={index} >
+                        <TouchableOpacity key={index} onPress={()=> details(item) }>
                             <ImageBackground source={{ uri: item.image }}
                                 style={styles.bgImage}>
-                                <Text style={styles.title} numberOfLines={1}>{item.title}</Text>
+                                <Text style={styles.title} numberOfLines={1}>{item.recipeName}</Text>
                             </ImageBackground>
                         </TouchableOpacity>
                     )
@@ -104,6 +65,11 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         justifyContent: 'flex-end',
         margin: 10,
+        shadowColor: 'black',
+        shadowOpacity: 0.3,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 8,
+        elevation: 5
     },
     title: {
         color: '#fff',

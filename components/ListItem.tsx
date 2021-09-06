@@ -10,36 +10,44 @@ import {
     FlatList
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { recipeDetails} from '../store/actions/Recipes';
 
 const ListItem = (props: any) => {
     const navigation = useNavigation();
+    const dispatch = useDispatch();
+
+    const details = (item:any)=>{
+        dispatch(recipeDetails(item.recipeId));
+        navigation.navigate('RecipeDetailsScreen')
+    }
 
     const renderItem = (itemData: any) => {
         return (
             itemData.index === 0 ?
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=> details(itemData.item) }>
                     <ImageBackground
                         source={{ uri: itemData.item.image }}
                         style={styles.bgImage}>
-                        <Text style={styles.title} numberOfLines={2}>{itemData.item.title}</Text>
+                        <Text style={styles.title} numberOfLines={2}>{itemData.item.recipeName}</Text>
                         <View style={styles.viewContainer}>
                             <View style={{ ...styles.menuView, backgroundColor: itemData.item.typeColor ? itemData.item.typeColor : 'green' }}>
                                 <Text style={styles.menuTitle}>{itemData.item.type}</Text>
                             </View>
-                            <Text style={styles.menuDate}>{itemData.item.date}</Text>
+                            <Text style={styles.menuDate}>{new Date(itemData.item.timeStamp).getDate()}</Text>
                         </View>
                     </ImageBackground>
                 </TouchableOpacity> :
-                <TouchableOpacity style={{ borderColor: '#d9d9d9', borderBottomWidth: 0.5 }}>
+                <TouchableOpacity style={{ borderColor: '#d9d9d9', borderBottomWidth: 0.5, }} onPress={()=> details(itemData.item) }>
                     <View style={styles.listView}>
                         <Image source={{ uri: itemData.item.image }} style={styles.image} />
                         <View style={styles.itemView}>
-                            <Text style={styles.itemTitle} numberOfLines={2}>{itemData.item.title}</Text>
+                            <Text style={styles.itemTitle} numberOfLines={2}>{itemData.item.recipeName}</Text>
                             <View style={styles.listitemview}>
                                 <View style={{ ...styles.menuView, backgroundColor: itemData.item.typeColor ? itemData.item.typeColor : 'green' }}>
                                     <Text style={styles.menuTitle}>{itemData.item.type}</Text>
                                 </View>
-                                <Text style={styles.itemDate}>{itemData.item.date}</Text>
+                                <Text style={styles.itemDate}>{new Date(itemData.item.timeStamp).getDate()}</Text>
                             </View>
                         </View>
                     </View>
@@ -102,7 +110,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginLeft: '3%',
         marginTop: 20,
-        marginBottom: 20
+        marginBottom: 20,
     },
     image: {
         height: 90,
