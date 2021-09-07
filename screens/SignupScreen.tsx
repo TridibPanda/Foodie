@@ -34,6 +34,7 @@ const SignupScreen = () => {
         setSecure((prevState) => !prevState);
     };
 
+    //Signup
     const Signupfn = () => {
         if (name.field && email.field && password.field && phone.field) {
             setVisible(true);

@@ -47,8 +47,10 @@ export const latestRecipes = () => {
 
 // Post recipe
 export const postRecipe = (recipeName: string, selectedValue: any, description: string, pickedImage: string,navigation:any) => {
-    const recipeId = Math.random().toString(36).replace('0.', '') + new Date().getTime();
+    
+    const recipeId = Math.random().toString(36).replace('0.', '') + new Date().getTime(); // recipe Id
     const timeStamp = new Date();
+
     return async (dispatch: Object | any) => {
         const uid = await AsyncStorage.getItem('uid');
 
@@ -58,7 +60,7 @@ export const postRecipe = (recipeName: string, selectedValue: any, description: 
         var ref = Firebase.storage()
             .ref()
             .child(`RecipeImage/` + `${recipeId}.jpeg`);
-        await ref.put(blob)
+        await ref.put(blob);
 
         // Image Download
         var ref = Firebase.storage()
@@ -153,7 +155,6 @@ export const bookmarks = () => {
     return async (dispatch: Object | any) => {
     await AsyncStorage.getItem('Bookmarks').then((req:any) => {
         const getItem = JSON.parse(req);
-        console.log(getItem, 'hi GET ITEM HERE');
         if (getItem !== null) {
             dispatch({ type: BOOKMARKS, bookmarks: getItem });
         }

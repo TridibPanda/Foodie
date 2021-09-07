@@ -8,7 +8,6 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { bookmarks } from '../store/actions/Recipes';
@@ -18,7 +17,6 @@ const RecipeDetailsScreen = () => {
 
     const [isBooked, setIsBooked] = useState(false);
     const dispatch = useDispatch();
-    const navigation = useNavigation();
     const recipe = useSelector((state: any) => state.recipes.recipe);
     const Bookmarks = useSelector((state: any) => state.recipes.bookmarks);
 
@@ -33,7 +31,6 @@ const RecipeDetailsScreen = () => {
         setIsBooked(true);
         await AsyncStorage.getItem('Bookmarks').then((req: any) => {
             const getItem = JSON.parse(req);
-            console.log(getItem, 'hi GET ITEM HERE');
             if (getItem === null) {
                 let Arr = [recipe];
                 AsyncStorage.setItem('Bookmarks', JSON.stringify(Arr));

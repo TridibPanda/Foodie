@@ -45,10 +45,8 @@ export const login = (email: string, password: string) => {
         Firebase.auth()
             .signInWithEmailAndPassword(email, password)
             .then((result: any) => {
-
                 AsyncStorage.setItem('uid', result.user.uid);
                 dispatch({ type: LOGIN, uid: result.user.uid })
-
             })
             .catch((error) => alert(error));
     }
@@ -60,7 +58,6 @@ export const logout = () => {
         Firebase.auth()
             .signOut()
             .then(async () => {
-
                 await AsyncStorage.removeItem('uid');
                 await AsyncStorage.removeItem("Bookmarks");
                 await AsyncStorage.removeItem("Recent");

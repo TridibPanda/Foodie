@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
     View,
     ScrollView,
@@ -85,14 +85,14 @@ const styles = StyleSheet.create({
         fontSize: 16,
         padding: 15
     },
-    emptyContainer: {
+    emptyContainer:{
         marginVertical: Dimensions.get("window").height * 0.4,
         marginHorizontal: Dimensions.get("window").width * 0.1,
         justifyContent: "center",
         alignItems: "center",
     },
-    emptyText: {
-        color: "#ccc",
+    emptyText:{
+        color: "#ccc", 
         fontSize: 16
     },
 });

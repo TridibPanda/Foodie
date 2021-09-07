@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     listView: {
         flexDirection: 'row',
         marginLeft: '3%',
-        marginTop: 10,
+        marginTop: 20,
         marginBottom: 20,
     },
     image: {

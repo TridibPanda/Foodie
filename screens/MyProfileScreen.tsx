@@ -58,6 +58,7 @@ const MyProfileScreen = () => {
         return true;
     };
 
+    //upload profile image
     const takeImageHandler = async () => {
         const uid = await AsyncStorage.getItem('uid');
         const hasPermission = await verifyPermissions();
@@ -106,6 +107,7 @@ const MyProfileScreen = () => {
         navigation.navigate('RecipeDetailsScreen')
     };
 
+    // update your about
     const saveAbout = async () => {
         const uid = await AsyncStorage.getItem('uid');
         db.collection('Users')
@@ -130,15 +132,8 @@ const MyProfileScreen = () => {
 
     const emptyComponent = () => {
         return (
-            <View
-                style={{
-                    marginVertical: Dimensions.get("window").height * 0.15,
-                    marginHorizontal: Dimensions.get("window").width * 0.1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                }}
-            >
-                <Text style={{ color: "#ccc", fontSize: 16 }}> No recipes available start adding some.</Text>
+            <View style={styles.emptyContainer}>
+                <Text style={styles.emptyText}> No recipes available start adding some.</Text>
             </View>
         );
     };
@@ -306,6 +301,16 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    emptyContainer: {
+        marginVertical: Dimensions.get("window").height * 0.15,
+        marginHorizontal: Dimensions.get("window").width * 0.1,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    emptyText: {
+        color: "#ccc",
+        fontSize: 16
     },
 });
 

@@ -98,7 +98,7 @@ const PostRecipeScreen = () => {
         if (result.status !== 'granted') {
             Alert.alert(
                 'Insufficient permissions!',
-                'You need to grant camera permissions to use this app.',
+                "you need to grant gallery permissions to use this app.",
                 [{ text: 'Okay' }]
             );
             return false;
