@@ -24,7 +24,6 @@ const LoginScreen = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [visible, setVisible] = useState(false);
-
     const dispatch = useDispatch();
     const navigation = useNavigation();
 
@@ -32,6 +31,7 @@ const LoginScreen = () => {
         setSecure((prevState) => !prevState);
     };
 
+    //login
     const handleLogin = () => {
         setVisible(true);
         dispatch(login(email, password));

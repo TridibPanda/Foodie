@@ -45,12 +45,6 @@ export const latestRecipes = () => {
     }
 };
 
-// // bookmarks
-// export const bookmarks = () => {
-    
-    
-// };
-
 // Post recipe
 export const postRecipe = (recipeName: string, selectedValue: any, description: string, pickedImage: string,navigation:any) => {
     const recipeId = Math.random().toString(36).replace('0.', '') + new Date().getTime();

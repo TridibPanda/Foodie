@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
     View,
     Text,
@@ -11,6 +11,8 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
+
+import { Recipes } from '../models/Recipes';
 import { userRecipes, recipeDetails } from '../store/actions/Recipes';
 import { view } from '../store/actions/Auth';
 
@@ -27,7 +29,7 @@ const ProfileScreen = () => {
         dispatch(userRecipes(recipe.uid));
     }, []);
 
-    const details = (item: any) => {
+    const details = (item: Recipes) => {
         dispatch(recipeDetails(item.recipeId));
         dispatch(view(item.uid))
         navigation.navigate('RecipeDetailsScreen')
@@ -60,9 +62,7 @@ const ProfileScreen = () => {
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={renderItem}
                     style={{ width: '100%' }}
-                // ListEmptyComponent={emptyComponent}
                 />
-
             </View>
         </ScrollView>
     );
@@ -87,16 +87,16 @@ const styles = StyleSheet.create({
         marginTop: '5%',
         marginHorizontal: '10%'
     },
-    about:{
-        fontSize: 16, 
-        color: '#7E8084', 
-        textAlign: 'center', 
+    about: {
+        fontSize: 16,
+        color: '#7E8084',
+        textAlign: 'center',
         margin: '5%'
     },
-    recipeText:{
+    recipeText: {
         fontSize: 25,
-         color: '#000', 
-         textAlign: 'center', 
+        color: '#000',
+        textAlign: 'center',
     },
     listView: {
         flexDirection: 'row',

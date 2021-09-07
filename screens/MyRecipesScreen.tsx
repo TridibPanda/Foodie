@@ -6,15 +6,18 @@ import {
     ImageBackground,
     StyleSheet,
     TouchableOpacity,
+    Dimensions
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { Recipes } from '../models/Recipes';
 import { myRecipes, recipeDetails } from '../store/actions/Recipes';
 import { view } from '../store/actions/Auth';
 
 
 const MyRecipesScreen = () => {
+
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const listData = useSelector((state: any) => state.recipes.myRecipes);
@@ -23,7 +26,7 @@ const MyRecipesScreen = () => {
         dispatch(myRecipes());
     }, [])
 
-    const details = (item: any) => {
+    const details = (item: Recipes) => {
         dispatch(recipeDetails(item.recipeId));
         dispatch(view(item.uid));
         navigation.navigate('RecipeDetailsScreen')
@@ -31,21 +34,25 @@ const MyRecipesScreen = () => {
 
     return (
         <ScrollView style={styles.screen} showsVerticalScrollIndicator={false}>
-            <View style={styles.listView}>
-
-                {listData.map((item: any, index: any) => {
-                    return (
-                        <TouchableOpacity key={index} onPress={() => details(item)}>
-                            <ImageBackground source={{ uri: item.image }}
-                                style={styles.bgImage}>
-                                <Text style={styles.title} numberOfLines={1}>{item.recipeName}</Text>
-                            </ImageBackground>
-                        </TouchableOpacity>
-                    )
-                })
-                }
-
-            </View>
+            {listData.length ?
+                <View style={styles.listView}>
+                    {listData.map((item: Recipes, index: number) => {
+                        return (
+                            <TouchableOpacity key={index} onPress={() => details(item)}>
+                                <ImageBackground source={{ uri: item.image }}
+                                    style={styles.bgImage}>
+                                    <Text style={styles.title} numberOfLines={1}>{item.recipeName}</Text>
+                                </ImageBackground>
+                            </TouchableOpacity>
+                        )
+                    })
+                    }
+                </View>
+                :
+                <View style={styles.emptyContainer}>
+                    <Text style={styles.emptyText}> No recipes available start adding some.</Text>
+                </View>
+            }
         </ScrollView>
     );
 };
@@ -53,7 +60,6 @@ const MyRecipesScreen = () => {
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
-
     },
     listView: {
         flexWrap: 'wrap',
@@ -78,7 +84,17 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
         padding: 15
-    }
+    },
+    emptyContainer: {
+        marginVertical: Dimensions.get("window").height * 0.4,
+        marginHorizontal: Dimensions.get("window").width * 0.1,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    emptyText: {
+        color: "#ccc",
+        fontSize: 16
+    },
 });
 
 export default MyRecipesScreen;

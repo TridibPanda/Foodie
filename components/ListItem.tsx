@@ -6,30 +6,32 @@ import {
     StyleSheet,
     TouchableOpacity,
     Image,
+    FlatList,
     Dimensions,
-    FlatList
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-import {Recipes} from '../models/Recipes'
-import { recipeDetails} from '../store/actions/Recipes';
+
+import { Recipes } from '../models/Recipes';
+import { recipeDetails } from '../store/actions/Recipes';
 import { view } from '../store/actions/Auth';
 
 const ListItem = (props: any) => {
+
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
-    const details = (item:Recipes)=>{
+    const details = (item: Recipes) => {
         dispatch(recipeDetails(item.recipeId));
         dispatch(view(item.uid))
         navigation.navigate('RecipeDetailsScreen')
     }
 
     const renderItem = (itemData: any) => {
-        let date = new Date(itemData.item.timeStamp.seconds * 1000 + itemData.item.timeStamp.nanoseconds / 1000000)
+        let date = itemData.item.timeStamp.seconds ? new Date(itemData.item.timeStamp.seconds * 1000 + itemData.item.timeStamp.nanoseconds / 1000000) : new Date();
         return (
             itemData.index === 0 ?
-                <TouchableOpacity onPress={()=> details(itemData.item) }>
+                <TouchableOpacity onPress={() => details(itemData.item)}>
                     <ImageBackground
                         source={{ uri: itemData.item.image }}
                         style={styles.bgImage}>
@@ -38,11 +40,11 @@ const ListItem = (props: any) => {
                             <View style={{ ...styles.menuView, backgroundColor: itemData.item.typeColor ? itemData.item.typeColor : 'green' }}>
                                 <Text style={styles.menuTitle}>{itemData.item.type}</Text>
                             </View>
-                            <Text style={styles.menuDate}>{`${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`}</Text>
+                            <Text style={styles.menuDate}>{`${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`}</Text>
                         </View>
                     </ImageBackground>
                 </TouchableOpacity> :
-                <TouchableOpacity style={{ borderColor: '#d9d9d9', borderBottomWidth: 0.5, }} onPress={()=> details(itemData.item) }>
+                <TouchableOpacity style={{ borderColor: '#d9d9d9', borderBottomWidth: 0.5, }} onPress={() => details(itemData.item)}>
                     <View style={styles.listView}>
                         <Image source={{ uri: itemData.item.image }} style={styles.image} />
                         <View style={styles.itemView}>
@@ -51,13 +53,21 @@ const ListItem = (props: any) => {
                                 <View style={{ ...styles.menuView, backgroundColor: itemData.item.typeColor ? itemData.item.typeColor : 'green' }}>
                                     <Text style={styles.menuTitle}>{itemData.item.type}</Text>
                                 </View>
-                                <Text style={styles.itemDate}>{`${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`}</Text>
+                                <Text style={styles.itemDate}>{`${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`}</Text>
                             </View>
                         </View>
                     </View>
                 </TouchableOpacity>
         )
-    }
+    };
+
+    const emptyComponent = () => {
+        return (
+            <View style={styles.emptyContainer} >
+                <Text style={styles.emptyText}>No recipe found!</Text>
+            </View>
+        );
+    };
 
     return (
         <View style={styles.screen}>
@@ -67,7 +77,7 @@ const ListItem = (props: any) => {
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={renderItem}
                 style={{ width: '100%' }}
-            // ListEmptyComponent={emptyComponent}
+                ListEmptyComponent={emptyComponent}
             />
         </View>
     );
@@ -139,7 +149,17 @@ const styles = StyleSheet.create({
         fontSize: 10,
         marginTop: '3%',
         marginLeft: '5%'
-    }
+    },
+    emptyContainer: {
+        marginTop: Dimensions.get("window").height * 0.3,
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    emptyText: {
+        color: "#ccc",
+        fontSize: 16
+    },
 });
 
 export default ListItem;

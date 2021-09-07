@@ -1,13 +1,15 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useWindowDimensions } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
 import ListItem from '../components/ListItem';
-import { recipes, latestRecipes, bookmarks} from '../store/actions/Recipes';
+import { recipes, bookmarks } from '../store/actions/Recipes';
 import { get } from '../store/actions/Auth';
 
 
 const HomeScreen = () => {
+  
   const dispatch = useDispatch();
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
@@ -28,28 +30,26 @@ const HomeScreen = () => {
   const Foodies = () => (
     <ListItem data={foodiesArray} />
   );
-  
+
   const bookmarksArray = useSelector((state: any) => state.recipes.bookmarks);
 
   const Bookmarks = () => (
     <ListItem data={bookmarksArray} />
   );
-  
+
   const renderScene = SceneMap({
     latest: LatestScreen,
     foodies: Foodies,
     bookmarks: Bookmarks
   });
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     dispatch(get());
-    dispatch(latestRecipes());
     dispatch(recipes());
     dispatch(bookmarks());
-  },[])
+  }, [])
 
   return (
-
     <TabView
       navigationState={{ index, routes }}
       renderScene={renderScene}
@@ -60,7 +60,6 @@ const HomeScreen = () => {
         activeColor='#2759d9'
         style={{ backgroundColor: '#fff' }} />}
     />
-
   );
 }
 

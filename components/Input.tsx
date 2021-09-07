@@ -8,7 +8,8 @@ import {
 
 const isHeight = Dimensions.get("window").height > 660;
 
-const Input = (props:any) => {
+const Input = (props: any) => {
+
   return (
     <View style={styles.input}>
       <TextInput

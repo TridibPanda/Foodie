@@ -6,10 +6,10 @@ export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
 export const GET = 'GET';
 export const VIEW = 'VIEW';
-export const LOCAL  = 'LOCAL';
+export const LOCAL = 'LOCAL';
 
 //signup
-export const signup = (name : string, email:string, password: string, phone: string | any) => {
+export const signup = (name: string, email: string, password: string, phone: string | any) => {
     return (dispatch: Object | any) => {
         Firebase.auth()
             .createUserWithEmailAndPassword(email, password)
@@ -40,11 +40,11 @@ export const signup = (name : string, email:string, password: string, phone: str
 };
 
 //login
-export const login = (email : string, password: string) => {
+export const login = (email: string, password: string) => {
     return (dispatch: Object | any) => {
         Firebase.auth()
             .signInWithEmailAndPassword(email, password)
-            .then((result :any) => {
+            .then((result: any) => {
 
                 AsyncStorage.setItem('uid', result.user.uid);
                 dispatch({ type: LOGIN, uid: result.user.uid })
@@ -62,6 +62,8 @@ export const logout = () => {
             .then(async () => {
 
                 await AsyncStorage.removeItem('uid');
+                await AsyncStorage.removeItem("Bookmarks");
+                await AsyncStorage.removeItem("Recent");
                 dispatch({ type: LOGOUT, uid: '' })
             })
             .catch((error) => {
@@ -82,32 +84,32 @@ export const local = () => {
 export const get = () => {
     return async (dispatch: Object | any) => {
         const userId = await AsyncStorage.getItem('uid');
-			db.collection('Users')
-			.doc(`${userId}`)
-			.get().then((doc)=> {
-                dispatch({type: GET, details: doc.data() })
-			}).catch((error) => {
-				console.log(error);
-			})
+        db.collection('Users')
+            .doc(`${userId}`)
+            .get().then((doc) => {
+                dispatch({ type: GET, details: doc.data() })
+            }).catch((error) => {
+                console.log(error);
+            })
     }
 };
 
 // view other profile
-export const view = (userId:string) => {
+export const view = (userId: string) => {
     return async (dispatch: Object | any) => {
-			db.collection('Users')
-			.doc(`${userId}`)
-			.get().then((doc)=> {
-                dispatch({type: VIEW, details: doc.data() })
-			}).catch((error) => {
-				console.log(error);
-			})
+        db.collection('Users')
+            .doc(`${userId}`)
+            .get().then((doc) => {
+                dispatch({ type: VIEW, details: doc.data() })
+            }).catch((error) => {
+                console.log(error);
+            })
     }
 };
 
 //forget password
-export const forget = (email : string) => {
-        Firebase.auth().sendPasswordResetEmail(email)
+export const forget = (email: string) => {
+    Firebase.auth().sendPasswordResetEmail(email)
         .then(function () {
             // Email sent.
             alert(`Link has been sent to this email address - ${email}`);

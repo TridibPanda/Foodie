@@ -1,4 +1,5 @@
 import { LOCAL, SIGNUP, LOGIN, LOGOUT, GET, VIEW } from '../actions/Auth';
+
 const initialState = {
     uid: '',
     data: {},

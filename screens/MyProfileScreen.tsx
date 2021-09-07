@@ -8,18 +8,21 @@ import {
     StyleSheet,
     TouchableOpacity,
     FlatList,
-    Modal
+    Modal,
+    Dimensions
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
-import Input from '../components/Input';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Firebase, { db } from '../config/Firebase';
 import { useDispatch, useSelector } from 'react-redux';
+
+import Firebase, { db } from '../config/Firebase';
+import { Recipes } from '../models/Recipes';
+import Input from '../components/Input';
 import { myRecipes, recipeDetails } from '../store/actions/Recipes';
-import { get,view } from '../store/actions/Auth';
+import { get, view } from '../store/actions/Auth';
 
 
 const MyProfileScreen = () => {
@@ -61,41 +64,43 @@ const MyProfileScreen = () => {
         if (!hasPermission) {
             return;
         }
-        const image: any = await ImagePicker.launchImageLibraryAsync({
-            allowsEditing: true,
-            quality: 0.5
-        });
+        try {
+            const image: any = await ImagePicker.launchImageLibraryAsync({
+                allowsEditing: true,
+                quality: 0.5
+            });
 
-        // Image Upload 
-        const response = await fetch(image.uri);
-        const blob = await response.blob();
-        var ref = Firebase.storage()
-            .ref()
-            .child(`ProfileImage/` + `${uid}.jpeg`);
-        await ref.put(blob)
+            // Image Upload 
+            const response = await fetch(image.uri);
+            const blob = await response.blob();
+            var ref = Firebase.storage()
+                .ref()
+                .child(`ProfileImage/` + `${uid}.jpeg`);
+            await ref.put(blob)
 
-        // Image Download
-        var ref = Firebase.storage()
-            .ref()
-            .child(`ProfileImage/` + `${uid}.jpeg`);
-        const DownloadImage = await ref.getDownloadURL();
+            // Image Download
+            var ref = Firebase.storage()
+                .ref()
+                .child(`ProfileImage/` + `${uid}.jpeg`);
+            const DownloadImage = await ref.getDownloadURL();
 
-        if (DownloadImage) {
-            setProfileImage(DownloadImage);
-            db.collection('Users')
-                .doc(`${uid}`)
-                .update({
-                    image: DownloadImage,
-                })
-                .then(() => {
-                    dispatch(get());
-                    alert('Profile Image upload completed')
-                })
-                .catch((error) => console.log(error));
-        }
+            if (DownloadImage) {
+                setProfileImage(DownloadImage);
+                db.collection('Users')
+                    .doc(`${uid}`)
+                    .update({
+                        image: DownloadImage,
+                    })
+                    .then(() => {
+                        dispatch(get());
+                        alert('Profile Image upload completed')
+                    })
+                    .catch((error) => console.log(error));
+            }
+        } catch (error: any) { console.log(error) };
     };
 
-    const details = (item: any) => {
+    const details = (item: Recipes) => {
         dispatch(recipeDetails(item.recipeId));
         dispatch(view(item.uid))
         navigation.navigate('RecipeDetailsScreen')
@@ -121,7 +126,22 @@ const MyProfileScreen = () => {
                 </ImageBackground>
             </TouchableOpacity>
         )
-    }
+    };
+
+    const emptyComponent = () => {
+        return (
+            <View
+                style={{
+                    marginVertical: Dimensions.get("window").height * 0.15,
+                    marginHorizontal: Dimensions.get("window").width * 0.1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}
+            >
+                <Text style={{ color: "#ccc", fontSize: 16 }}> No recipes available start adding some.</Text>
+            </View>
+        );
+    };
 
     return (
         <ScrollView style={styles.screen}>
@@ -143,7 +163,7 @@ const MyProfileScreen = () => {
                         <TouchableOpacity style={styles.cancel} onPress={() => setVisible(false)}>
                             <Text style={{ color: '#fff', }}>Cancel</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.connect} onPress={saveAbout}>
+                        <TouchableOpacity disabled={about ? false : true} style={{ ...styles.connect, backgroundColor: about ? '#2c629c' : '#a2bedb' }} onPress={saveAbout}>
                             <Text style={{ color: '#fff', }}>Save</Text>
                         </TouchableOpacity>
                     </View>
@@ -157,7 +177,6 @@ const MyProfileScreen = () => {
                             name="md-pencil"
                             size={10}
                             color="#000"
-
                         />
                     </TouchableOpacity>
                 </ImageBackground>
@@ -175,9 +194,8 @@ const MyProfileScreen = () => {
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={renderItem}
                     style={{ width: '100%' }}
-                // ListEmptyComponent={emptyComponent}
+                    ListEmptyComponent={emptyComponent}
                 />
-
             </View>
         </ScrollView>
     );
@@ -205,7 +223,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: '#000',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     name: {
         fontSize: 25,
@@ -282,14 +300,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     connect: {
-        backgroundColor: '#2c629c',
         borderRadius: 20,
         width: '40%',
         height: 35,
         alignSelf: 'center',
         alignItems: 'center',
         justifyContent: 'center',
-
     },
 });
 

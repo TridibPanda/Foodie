@@ -14,6 +14,7 @@ import Input from '../components/Input';
 import { forget } from '../store/actions/Auth';
 
 const ForgotPasswordScreen = () => {
+
     const [email, setEmail] = useState('');
     const [visible, setVisible] = useState(false);
     const navigation = useNavigation();

@@ -3,16 +3,18 @@ import {
   Image,
   TouchableOpacity,
   Text,
-  View
+  View,
+  StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer, DrawerActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { useSelector, useDispatch } from 'react-redux';
+
 import { logout } from '../store/actions/Auth';
 
-import DefaultScreen from '../screens/DefaultScreen';
+import SplashScreen from '../screens/SplashScreen';
 import InitialScreen from '../screens/InitialScreen';
 import SignupScreen from '../screens/SignupScreen';
 import LoginScreen from '../screens/LoginScreen';
@@ -23,6 +25,7 @@ import PostRecipeScreen from '../screens/PostRecipeScreen';
 import RecipeDetailsScreen from '../screens/RecipeDetailsScreen';
 import MyProfileScreen from '../screens/MyProfileScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import SearchScreen from '../screens/SearchScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -51,7 +54,7 @@ const HomeStack = () => {
               name="search"
               size={25}
               color="#000"
-              onPress={() => alert("Hi")}
+              onPress={() => navigation.navigate('SearchScreen')}
             />
           ),
         })}
@@ -84,14 +87,15 @@ const MyrecipesStack = () => {
               name="search"
               size={25}
               color="#000"
-              onPress={() => alert("Hi")}
+              onPress={() => navigation.navigate('SearchScreen')}
             />
           ),
         })}
       />
     </Stack.Navigator>
   )
-}
+};
+
 // Profile stack
 const ProfileStack = () => {
   return (
@@ -116,7 +120,7 @@ const ProfileStack = () => {
               name="search"
               size={25}
               color="#000"
-              onPress={() => alert("Hi")}
+              onPress={() => navigation.navigate('SearchScreen')}
             />
           ),
         })}
@@ -127,6 +131,7 @@ const ProfileStack = () => {
 
 // Drawer
 const DrawerNav = () => {
+
   const dispatch = useDispatch();
   const userData = useSelector((state: any) => state.auth.data);
 
@@ -135,20 +140,13 @@ const DrawerNav = () => {
       return (
         <DrawerContentScrollView {...props} >
           <Image source={{ uri: 'https://media.istockphoto.com/photos/chicken-fried-rice-picture-id945606006' }} style={{ height: 150 }} />
-          <View style={{alignItems:'center',margin:10}}>
-                <Image style={{
-                  height: 100,
-                  width: 100,
-                  borderRadius: 10,
-                  borderWidth:2,
-                  overflow:'hidden',
-                  borderColor:'#ccc',
-                }} source={{ uri: userData.image ? userData.image : 'https://icon-library.com/images/default-user-icon/default-user-icon-20.jpg' }} />
-                <Text style={{fontSize:20,color:'#000',textAlign:'center'}}>{userData.name}</Text>
-              </View>
-          <DrawerItemList {...props}/>
-          <TouchableOpacity style={{ flexDirection: 'row', margin: 15 }} onPress={() => dispatch(logout())}>
-            <Text style={{ color: '#ccc', fontSize: 15 }}>Log-out</Text>
+          <View style={styles.drawerView}>
+            <Image style={styles.drawerProfile} source={{ uri: userData.image ? userData.image : 'https://icon-library.com/images/default-user-icon/default-user-icon-20.jpg' }} />
+            <Text style={styles.drawerName}>{userData.name}</Text>
+          </View>
+          <DrawerItemList {...props} />
+          <TouchableOpacity style={styles.logOutView} onPress={() => dispatch(logout())}>
+            <Text style={styles.logoutText}>Log-out</Text>
             <Ionicons
               style={{ paddingLeft: 5 }}
               name="exit-outline"
@@ -201,7 +199,7 @@ const DrawerNav = () => {
       }} />
     </Drawer.Navigator>
   )
-}
+};
 
 const AppNavigator = () => {
 
@@ -220,8 +218,8 @@ const AppNavigator = () => {
             options={{ headerShown: false }}
           />
           : !isloggedIn ? <Stack.Screen
-            name="DefaultScreen"
-            component={DefaultScreen}
+            name="SplashScreen"
+            component={SplashScreen}
             options={{ headerShown: false }}
           /> :
             <>
@@ -248,36 +246,70 @@ const AppNavigator = () => {
             </>
         }
         <Stack.Screen
-                name="ProfileScreen"
-                component={ProfileScreen}
-                options={({ route }) => ({
-                  title: userProfile.name,
-                })}
-              />
-              <Stack.Screen
+          name="ProfileScreen"
+          component={ProfileScreen}
+          options={({ route }) => ({
+            title: userProfile.name,
+          })}
+        />
+        <Stack.Screen
           name="RecipeDetailsScreen"
           component={RecipeDetailsScreen}
-          options={({ route,navigation }) => ({
+          options={({ route, navigation }) => ({
             title: recipe.type,
-            
             headerRight: () => (
-              <TouchableOpacity onPress={()=> navigation.navigate('ProfileScreen') }>
-                <Image style={{
-                  height: 40,
-                  width: 40,
-                  padding: 15,
-                  marginRight: 20,
-                  borderRadius: 10,
-                  borderWidth:2,
-                  borderColor:'#ccc',
-                }} source={{ uri: userProfile.image ? userProfile.image : 'https://icon-library.com/images/default-user-icon/default-user-icon-20.jpg' }} />
+              <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen')}>
+                <Image style={styles.headerProfile} source={{ uri: userProfile.image ? userProfile.image : 'https://icon-library.com/images/default-user-icon/default-user-icon-20.jpg' }} />
               </TouchableOpacity>
             ),
           })}
+        />
+        <Stack.Screen
+          name="SearchScreen"
+          component={SearchScreen}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
   );
 
-}
+};
+
+const styles = StyleSheet.create({
+  headerProfile: {
+    height: 40,
+    width: 40,
+    padding: 15,
+    marginRight: 20,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#ccc',
+  },
+  drawerView: {
+    alignItems: 'center',
+    margin: 10
+  },
+  drawerProfile: {
+    height: 100,
+    width: 100,
+    borderRadius: 10,
+    borderWidth: 2,
+    overflow: 'hidden',
+    borderColor: '#ccc',
+  },
+  drawerName: {
+    fontSize: 20,
+    color: '#000',
+    textAlign: 'center'
+  },
+  logOutView: {
+    flexDirection: 'row',
+    margin: 15
+  },
+  logoutText: {
+    color: '#ccc',
+    fontSize: 15
+  },
+});
+
 export default AppNavigator;

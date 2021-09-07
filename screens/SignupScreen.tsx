@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
     loginView: {
         flexDirection: 'row',
         marginTop: 20,
-        marginBottom:10
+        marginBottom: 10
     },
     bottomLoginText: {
         paddingRight: 5,

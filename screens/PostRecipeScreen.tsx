@@ -20,8 +20,11 @@ import * as Permissions from 'expo-permissions';
 import * as FileSystem from "expo-file-system";
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import { postRecipe} from '../store/actions/Recipes';
+
+import { postRecipe } from '../store/actions/Recipes';
 import Loading from '../components/Loading';
+
+// recipe types
 const recipeTypes = [
     {
         type: 'ASIAN FOOD',
@@ -78,6 +81,7 @@ const recipeTypes = [
 ];
 
 const PostRecipeScreen = () => {
+
     const navigation = useNavigation();
     const [pickedImage, setPickedImage] = useState({ field: '', check: false });
     const [recipeName, setRecipeName] = useState({ field: '', check: false });
@@ -127,11 +131,9 @@ const PostRecipeScreen = () => {
 
 
     const submit = async () => {
-
-        console.log(selectedValue.field)
         if (pickedImage.field && recipeName.field && selectedValue.field && description.field) {
             setVisible(true);
-            dispatch(postRecipe(recipeName.field,selectedValue.field,description.field,pickedImage.field,navigation));
+            dispatch(postRecipe(recipeName.field, selectedValue.field, description.field, pickedImage.field, navigation));
             setTimeout(() => {
                 setVisible(false);
             }, 2000)
@@ -146,7 +148,7 @@ const PostRecipeScreen = () => {
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} style={{ flex: 1 }}>
             <ScrollView style={{ backgroundColor: "#fff" }}>
-            <Loading visible={visible} />
+                <Loading visible={visible} />
                 <View style={styles.icnTxtContainer}>
                     <View >
                         <Ionicons
@@ -158,11 +160,7 @@ const PostRecipeScreen = () => {
                     </View>
                     <TouchableOpacity onPress={submit}>
                         <View>
-                            <Text
-                                style={styles.topMostTxt}
-                            >
-                                Done
-                            </Text>
+                            <Text style={styles.topMostTxt} >Done</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -195,10 +193,10 @@ const PostRecipeScreen = () => {
                     <View style={styles.passwordContainer}>
                         <Picker
                             selectedValue={selectedValue.field}
-                            style={{ height: 50, width: '100%', color: '#000' }}
+                            style={styles.picker}
                             onValueChange={(itemValue, itemIndex) => (itemValue === "Select recipe type" ? setSelectedValue({ field: '', check: true }) : setSelectedValue({ field: itemValue, check: false }))}
                         >
-                            <Picker.Item color= '#5e5e5e' label="Select recipe type" value="Select recipe type" />
+                            <Picker.Item color='#5e5e5e' label="Select recipe type" value="Select recipe type" />
                             {
                                 recipeTypes.map((item: any, index: any) => {
                                     return (
@@ -242,6 +240,11 @@ const styles = StyleSheet.create({
         fontSize: 12,
         alignSelf: 'center',
         paddingBottom: 5
+    },
+    picker: {
+        height: 50,
+        width: '100%',
+        color: '#000'
     },
     passwordContainer: {
         width: '90%',

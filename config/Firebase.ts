@@ -2,7 +2,14 @@ import firebase from 'firebase';
 import 'firebase/firestore';
 
 var firebaseConfig = {
-
+    apiKey: "apiKey",
+    authDomain: "authDomain",
+    databaseURL: "databaseURL",
+    projectId: "projectId",
+    storageBucket: "messagingSenderId",
+    messagingSenderId: "882665180224",
+    appId: "appId",
+    measurementId: "measurementId"
 };
 
 // Initialize Firebase

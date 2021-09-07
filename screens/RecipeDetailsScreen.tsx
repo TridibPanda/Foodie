@@ -10,7 +10,8 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
-import { bookmarks} from '../store/actions/Recipes';
+
+import { bookmarks } from '../store/actions/Recipes';
 import { view } from '../store/actions/Auth';
 
 const RecipeDetailsScreen = () => {
@@ -23,7 +24,7 @@ const RecipeDetailsScreen = () => {
 
     useEffect(() => {
         dispatch(view(recipe.uid));
-        if(Bookmarks.find((data: any) => data.recipeId === recipe.recipeId)){
+        if (Bookmarks.find((data: any) => data.recipeId === recipe.recipeId)) {
             setIsBooked(true);
         }
     }, []);
@@ -34,14 +35,9 @@ const RecipeDetailsScreen = () => {
             const getItem = JSON.parse(req);
             console.log(getItem, 'hi GET ITEM HERE');
             if (getItem === null) {
-                let recentArr = [recipe];
-                AsyncStorage.setItem('Bookmarks', JSON.stringify(recentArr));
+                let Arr = [recipe];
+                AsyncStorage.setItem('Bookmarks', JSON.stringify(Arr));
             } else {
-                for (let i = 0; i < getItem.length; i++) {
-                    if (recipe.recipeId === getItem[i].recipeId) {
-                        getItem.splice(i, 1);
-                    }
-                }
                 getItem.unshift(recipe);
                 AsyncStorage.setItem('Bookmarks', JSON.stringify(getItem));
             }
